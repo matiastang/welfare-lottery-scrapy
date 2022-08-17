@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2022-08-11 12:40:01
+LastEditTime: 2022-08-17 18:11:23
 FilePath: /welfare-lottery-scrapy/welfareLottery/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -30,26 +30,60 @@ class WelfarelotteryPipeline:
         )
         # 通过cursor执行增删查改
         self.cursor = self.connect.cursor()
+        # 查询最新一条数据
+        sql = """
+            SELECT * FROM welfare_lottery_ssq ORDER BY code DESC LIMIT 1
+        """
+        self.cursor.execute(sql)
+        # 这是获取表中最后的数据
+        result = self.cursor.fetchone()
+        print('result===', result)
+        if result:
+            self.lastCode = result['code'] if result['code'] else None
+        else:
+            self.lastCode = None
+        print('lastCode', self.lastCode)
 
     def open_spider(self, spider):
         print('open_spider')
 
     def process_item(self, item, spider):
-        print('---process_item---')
-        print(item)
-        # sql = """
-        #     insert into welfare_lottery_ssq(%s) value(%s)
-        # """ % (','.join([k for k, v in item()]), ','.join(["%s" for k, v in item()]))
-        # self.cursor.execute(sql, [v for k, v in item()])
+        print('process_item')
+
         sql = """
             insert into welfare_lottery_ssq(code, date, red, blue) value(%s, %s, %s, %s)
         """
+        
+        # name区分爬虫
+        if spider.name == 'welfare_last':
+            if self.lastCode == None:
+                try:
+                    self.cursor.execute(sql, [item['code'], item['date'], item['red'], item['blue']])
+                    print(item['code'] + '保存成功----')
+                    self.connect.commit()
+
+                except:
+                    print(item['code'] + '保存失败----')
+                    self.connect.rollback()
+            else:
+                print('lastCode2', self.lastCode)
+                if int(item['code']) > int(self.lastCode):
+                    print('add', item)
+                    try:
+                        self.cursor.execute(sql, [item['code'], item['date'], item['red'], item['blue']])
+                        print(item['code'] + 'add保存成功----')
+                        self.connect.commit()
+
+                    except:
+                        print(item['code'] + 'add保存失败----')
+                        self.connect.rollback()
+            
+            return item
     
         try:
             self.cursor.execute(sql, [item['code'], item['date'], item['red'], item['blue']])
             print(item['code'] + '保存成功----')
             self.connect.commit()
-            # post_id = self.cursor.lastrowid
 
         except:
             print(item['code'] + '保存失败----')
@@ -59,5 +93,6 @@ class WelfarelotteryPipeline:
 
     def close_spider(self, spider):
         print('close_spider')
+
         self.connect.close()
         self.cursor.close()

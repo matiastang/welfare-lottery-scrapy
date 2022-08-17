@@ -2,16 +2,15 @@
 Author: matiastang
 Date: 2022-08-09 17:50:16
 LastEditors: matiastang
-LastEditTime: 2022-08-12 10:52:27
+LastEditTime: 2022-08-17 18:05:43
 FilePath: /welfare-lottery-scrapy/welfareLottery/welfareLottery/spiders/welfare_spider.py
-Description: 
+Description: 爬取到目前为止能查询到的所有数据
 '''
 import scrapy
 import json
 import datetime
 from time import strftime
 from welfareLottery.items import WelfarelotteryItem
-
 
 class WelfareSpider(scrapy.Spider):
 
@@ -50,19 +49,6 @@ class WelfareSpider(scrapy.Spider):
         body = json.loads(bodyStr)
         if body:
             result = body['result']
-            # if result:
-            #     def getItemValue(item):
-            #         return {
-            #             'code': item['code'],
-            #             'date': item['date'],
-            #             'red': item['red'],
-            #             'blue' : item['blue'],
-            #         }
-            #     # 使用 list() 转换为列表，Python 3.x 返回迭代器。
-            #     values = list(map(getItemValue, result))
-            #     self.log('--------------response.body.result--------------')
-            #     print(values)
-            #     print(len(values))
             '''
             Selector有四个基本的方法，最常用的还是xpath:
             xpath(): 传入xpath表达式，返回该表达式所对应的所有节点的selector list列表
@@ -91,3 +77,6 @@ class WelfareSpider(scrapy.Spider):
 
         requestUrl = self.url + '&issueStart=' + self.requestYear + ('001' if self.isYearFirst else '100') + '&issueEnd=' + self.requestYear + ('100' if self.isYearFirst else '200')
         yield scrapy.Request(url=requestUrl, callback=self.parse, cookies={'HMF_CI': self.HMF_CI_Cookie})
+    
+    # def closed(reason):
+    #     print('welfare_spider closed')
