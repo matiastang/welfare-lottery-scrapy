@@ -2,13 +2,12 @@
 Author: matiastang
 Date: 2022-08-11 11:13:01
 LastEditors: matiastang
-LastEditTime: 2022-08-18 11:17:30
+LastEditTime: 2022-08-19 14:03:36
 FilePath: /welfare-lottery-scrapy/welfareLottery/start.py
 Description: 启动
 '''
 #!/usr/bin/python3
 #coding=utf-8
-from ast import Try
 import sys
 from scrapy import cmdline
 
