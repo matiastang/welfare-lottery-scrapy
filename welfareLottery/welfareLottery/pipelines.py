@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2022-08-17 18:11:23
+LastEditTime: 2023-02-22 19:36:50
 FilePath: /welfare-lottery-scrapy/welfareLottery/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -37,7 +37,6 @@ class WelfarelotteryPipeline:
         self.cursor.execute(sql)
         # 这是获取表中最后的数据
         result = self.cursor.fetchone()
-        print('result===', result)
         if result:
             self.lastCode = result['code'] if result['code'] else None
         else:
@@ -45,10 +44,10 @@ class WelfarelotteryPipeline:
         print('lastCode', self.lastCode)
 
     def open_spider(self, spider):
-        print('open_spider')
+        print('====open_spider====')
 
     def process_item(self, item, spider):
-        print('process_item')
+        print('====process_item====')
 
         sql = """
             insert into welfare_lottery_ssq(code, date, red, blue) value(%s, %s, %s, %s)
@@ -92,7 +91,7 @@ class WelfarelotteryPipeline:
         return item
 
     def close_spider(self, spider):
-        print('close_spider')
+        print('====close_spider====')
 
         self.connect.close()
         self.cursor.close()

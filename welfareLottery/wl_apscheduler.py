@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-19 10:12:34
 LastEditors: matiastang
-LastEditTime: 2022-08-19 14:45:38
+LastEditTime: 2023-02-22 19:38:21
 FilePath: /welfare-lottery-scrapy/welfareLottery/wl_apscheduler.py
 Description: 定时任务
 '''
@@ -27,6 +27,7 @@ if __name__ == '__main__':
         id="0001", name="scrapy_welfare_last",
         func=my_job, trigger="cron",
         # day_of_week="1, 3, 6", hour="21", minute="30"
-        day_of_week="4", hour="14", minute="44"
+        # day_of_week="4", hour="14", minute="44"
+        day_of_week="3", hour="19", minute="40"
     )
     sched.start()

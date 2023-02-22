@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2022-08-11 11:15:32
+LastEditTime: 2023-02-22 19:35:19
 FilePath: /welfare-lottery-scrapy/welfareLottery/welfareLottery/settings.py
 Description: settings
 '''
@@ -26,7 +26,7 @@ NEWSPIDER_MODULE = 'welfareLottery.spiders'
 
 # Obey robots.txt rules
 # 是否遵守协议,一般给位false,但是创建完项目是是True(如果Html页面配置了不可爬虫的字段，将不会对其爬取),我们把它改为False
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # 最大并发量 默认16
