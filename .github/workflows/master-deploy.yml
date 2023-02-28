@@ -25,7 +25,7 @@ jobs:
           echo "地址写入known_hosts，防止警告"
           ssh-keyscan -t rsa $HOST >> ~/.ssh/known_hosts
           echo "同步文件"
-          scp -o StrictHostKeyChecking=no -r ./ root@${HOST}:/var/mt-project/mt-scrapy/welfare-lottery-scrapy/
+          scp -o StrictHostKeyChecking=no -r ./welfare-lottery-scrapy root@${HOST}:/var/mt-project/mt-scrapy/
           echo "上传完成"
         # echo "重启服务器"
         # ssh -o StrictHostKeyChecking=no root@${HOST} "sudo /usr/sbin/nginx -s reload"
