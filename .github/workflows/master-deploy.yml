@@ -1,0 +1,38 @@
+name: master deploy
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+
+      - name: commit
+        env:
+          KEY: ${{ secrets.TDY_PRIVATE_KEY }}
+          HOST: ${{ secrets.TDY_HOST }}
+        run: |
+          echo "添加key"
+          mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          echo "启动ssh-agent"
+          eval "$(ssh-agent -s)"
+          echo "添加秘钥"
+          ssh-add ~/.ssh/id_rsa
+          echo "地址写入known_hosts，防止警告"
+          ssh-keyscan -t rsa $HOST >> ~/.ssh/known_hosts
+          echo "同步文件"
+          scp -o StrictHostKeyChecking=no -r ./ root@${HOST}:/var/mt-project/mt-scrapy/welfare-lottery-scrapy/
+          echo "上传完成"
+        # echo "重启服务器"
+        # ssh -o StrictHostKeyChecking=no root@${HOST} "sudo /usr/sbin/nginx -s reload"
+        # 后端服务相关
+        # scp -o StrictHostKeyChecking=no -r server/crmserver ubuntu@${HOST}:/home/ubuntu/
+        # ssh -o StrictHostKeyChecking=no ubuntu@${HOST} "sudo /home/ubuntu/crmapi/restart.sh > /dev/null 2>&1 &"
+
+        # echo "配置config"
+        # echo "Host tdypro\nHostName ${HOST}\nPort 22\nUser root\nIdentityFile ~/.ssh/id_rsa" > ~/.ssh/config
+        # cat ~/.ssh/config
