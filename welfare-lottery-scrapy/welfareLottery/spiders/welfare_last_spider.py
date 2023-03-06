@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:50:16
 LastEditors: matiastang
-LastEditTime: 2023-03-02 20:00:47
+LastEditTime: 2023-03-06 19:48:44
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/spiders/welfare_last_spider.py
 Description: 爬取到目前为止最新的数据
 '''
@@ -31,8 +31,7 @@ class WelfareLastSpider(scrapy.Spider):
         if body:
             result = body['result']
             for item in result:
-                # prizegrades = list(map(lambda info: { 'type': str(info['type']), 'num': info['typenum'], 'money': info['typemoney'] }, item['prizegrades']))
                 yield WelfarelotteryItem(code=item['code'], date=item['date'], week=item['week'], red=item['red'], blue=item['blue'], content=item['content'], prizegrades=item['prizegrades'], sales=item['sales'], poolmoney=item['poolmoney'], videoLink=item['videoLink'], detailsLink=item['detailsLink'])
     
     def closed(self, reason):
-        print('welfare_last_spider closed')
+        print('====== welfare_last_spider closed ======')

@@ -2,8 +2,8 @@
 Author: matiastang
 Date: 2022-08-09 17:50:16
 LastEditors: matiastang
-LastEditTime: 2022-08-17 18:05:43
-FilePath: /welfare-lottery-scrapy/welfareLottery/welfareLottery/spiders/welfare_spider.py
+LastEditTime: 2023-03-06 19:53:34
+FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/spiders/welfare_spider.py
 Description: 爬取到目前为止能查询到的所有数据
 '''
 import scrapy
@@ -41,7 +41,9 @@ class WelfareSpider(scrapy.Spider):
         ]
 
         for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse, cookies={'HMF_CI': self.HMF_CI_Cookie})
+            print('====== 请求：', url)
+            # yield scrapy.Request(url=url, callback=self.parse, cookies={'HMF_CI': self.HMF_CI_Cookie})
+            yield scrapy.Request(url=url, callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         bodyStr = str(response.body, encoding='utf-8')
@@ -57,26 +59,28 @@ class WelfareSpider(scrapy.Spider):
             re(): 根据传入的正则表达式对数据进行提取，返回字符串list列表
             '''
             for item in result:
-                yield WelfarelotteryItem(code=item['code'], date=item['date'], red=item['red'], blue=item['blue'])
-            countNum = body['countNum']
+                yield WelfarelotteryItem(code=item['code'], date=item['date'], week=item['week'], red=item['red'], blue=item['blue'], content=item['content'], prizegrades=item['prizegrades'], sales=item['sales'], poolmoney=item['poolmoney'], videoLink=item['videoLink'], detailsLink=item['detailsLink'])
+            countNum = len(result)
             if self.requestYear == self.nowYear:
                 if countNum <= 0:
                     self.isYearFirst = False
             else:
                 if countNum <= 0:
-                    print('查询结束:' + self.requestYear + '年-' + self.nowYear + '年的数据')
+                    print('====== 查询结束:' + self.requestYear + '年-' + self.nowYear + '年的数据 ======')
                     return
 
         if self.isYearFirst is False:
             # 查询上一年的数据
             yearNum = int(self.requestYear)
             self.requestYear = str(yearNum - 1)
-            print('查询上' + self.requestYear + '年的数据')
+            print('====== 查询上' + self.requestYear + '年的数据 ======')
 
         self.isYearFirst = bool(1-self.isYearFirst)
 
         requestUrl = self.url + '&issueStart=' + self.requestYear + ('001' if self.isYearFirst else '100') + '&issueEnd=' + self.requestYear + ('100' if self.isYearFirst else '200')
-        yield scrapy.Request(url=requestUrl, callback=self.parse, cookies={'HMF_CI': self.HMF_CI_Cookie})
+        print('====== 请求：', requestUrl)
+        # yield scrapy.Request(url=requestUrl, callback=self.parse, cookies={'HMF_CI': self.HMF_CI_Cookie})
+        yield scrapy.Request(url=requestUrl, callback=self.parse, dont_filter=True)
     
     # def closed(reason):
     #     print('welfare_spider closed')
