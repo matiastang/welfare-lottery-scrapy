@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2023-03-06 19:54:53
+LastEditTime: 2023-03-07 19:40:00
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -30,10 +30,14 @@ class WelfarelotteryPipeline:
         #     cursorclass=pymysql.cursors.DictCursor
         # )
         self.connect = pymysql.connect(
-            host="${{secrets.TDY_HOST}}",
-            db="${{secrets.TDY_MYSQL_SCRAPY_DB}}",
-            user="${{secrets.TDY_MYSQL_USER}}",
-            passwd="${{secrets.TDY_MYSQL_PASSWD}}",
+            # host="${{secrets.TDY_HOST}}",
+            # db="${{secrets.TDY_MYSQL_SCRAPY_DB}}",
+            # user="${{secrets.TDY_MYSQL_USER}}",
+            # passwd="${{secrets.TDY_MYSQL_PASSWD}}",
+            host='127.0.0.1',
+            db="mt_scrapy",
+            user="matiastang",
+            passwd="MySQL_18380449615",
             charset='utf8',
             use_unicode=True,
             cursorclass=pymysql.cursors.DictCursor
