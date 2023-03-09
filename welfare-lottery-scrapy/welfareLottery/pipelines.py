@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2023-03-07 19:40:00
+LastEditTime: 2023-03-09 19:39:26
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -37,6 +37,7 @@ class WelfarelotteryPipeline:
             host='127.0.0.1',
             db="mt_scrapy",
             user="matiastang",
+            # user="root",
             passwd="MySQL_18380449615",
             charset='utf8',
             use_unicode=True,
@@ -63,46 +64,59 @@ class WelfarelotteryPipeline:
 
     def process_item(self, item, spider):
         print('====== process_item ======')
-
-        # sql = """
-        #     insert into welfare_lottery_ssq(code, date, red, blue) value(%s, %s, %s, %s)
-        # """
-
-        sql = """
-            insert into welfare_lottery_double(code, date, week, red, blue, content, prizegrades, sales, poolmoney, videoLink, detailsLink) value(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        insertSql = """
+            insert into welfare_lottery_double(code, date, week, red, blue, content, prize_grades, sales, poolmoney, video_link, details_link) value(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        
+        updateSql = """
+            UPDATE welfare_lottery_double SET
+            code=%s,
+            date=%s,
+            week=%s,
+            red=%s,
+            blue=%s,
+            content=%s,
+            prize_grades=%s,
+            sales=%s,
+            poolmoney=%s,
+            video_link=%s,
+            details_link=%s;
+        """
         prizegrades = json.dumps(list(map(lambda info: { 'type': str(info['type']), 'num': info['typenum'], 'money': info['typemoney'] }, item['prizegrades'])))
         # name区分爬虫
         if spider.name == 'welfare_last':
-            if self.lastCode == None:
-                # print(" ".join('%s' %i for i in item['prizegrades']))
-                # ",".join(prizegrades)
+            if self.lastCode == None or int(item['code']) > int(self.lastCode):
                 try:
-                    self.cursor.execute(sql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
-                    print(item['code'] + '====== 保存成功 ======')
+                    self.cursor.execute(insertSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                    print(item['code'] + '====== 新增成功 ======')
                     self.connect.commit()
 
                 except:
-                    print(item['code'] + '====== 保存失败 ======')
+                    print(item['code'] + '====== 新增失败 ======')
                     self.connect.rollback()
             else:
-                if int(item['code']) > int(self.lastCode):
-                    try:
-                        # self.cursor.execute(sql, [item['code'], item['date'], item['red'], item['blue']])
-                        self.cursor.execute(sql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
-                        print(item['code'] + '====== add保存成功 ======')
-                        self.connect.commit()
+                # if int(item['code']) > int(self.lastCode):
+                #     try:
+                #         self.cursor.execute(insertSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                #         print(item['code'] + '====== add保存成功 ======')
+                #         self.connect.commit()
 
-                    except:
-                        print(item['code'] + '====== add保存失败 ======')
-                        self.connect.rollback()
+                #     except:
+                #         print(item['code'] + '====== add保存失败 ======')
+                #         self.connect.rollback()
+                print(updateSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                try:
+                    self.cursor.execute(updateSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                    print(item['code'] + '====== 更新成功 ======')
+                    self.connect.commit()
+
+                except:
+                    print(item['code'] + '====== 更新失败 ======')
+                    self.connect.rollback()
             
             return item
     
         try:
-            self.cursor.execute(sql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
-            # self.cursor.execute(sql, [item['code'], item['date'], item['red'], item['blue']])
+            self.cursor.execute(insertSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
             print(item['code'] + '====== 保存成功 ======')
             self.connect.commit()
 
@@ -114,6 +128,5 @@ class WelfarelotteryPipeline:
 
     def close_spider(self, spider):
         print('====== close_spider ======')
-
         self.connect.close()
         self.cursor.close()
