@@ -1,8 +1,8 @@
 <!--
  * @Author: matiastang
  * @Date: 2022-08-09 15:14:58
- * @LastEditors: matiastang
- * @LastEditTime: 2023-03-02 01:02:00
+ * @LastEditors: tangdaoyong
+ * @LastEditTime: 2023-03-10 00:08:08
  * @FilePath: /welfare-lottery-scrapy/README.md
  * @Description: README
 -->
@@ -12,12 +12,17 @@
 
 ## 安装Scrapy
 
-直接使用`pip3`安装`Scrapy`：
-```
+* 安装`Scrapy`：
+```sh
 $ pip3 install Scrapy -i https://pypi.douban.com/simple
 ```
-然后，使用`scrapy startproject welfareLottery`创建新项目时，可能就会报下面错误：
+* 安装`pymysql`、`apscheduler`
+```sh
+$ pip3 install pymysql -i https://pypi.douban.com/simple
 ```
+
+然后，使用`scrapy startproject welfareLottery`创建新项目时，可能就会报下面错误：
+```sh
 $ scrapy startproject welfareLottery 
 Traceback (most recent call last):
   File "/Users/matias/.local/share/virtualenvs/welfare-lottery-scrapy-Qkb1Kj8J/bin/scrapy", line 5, in <module>
@@ -35,13 +40,13 @@ Traceback (most recent call last):
 ImportError: dlopen(/Users/matias/.local/share/virtualenvs/welfare-lottery-scrapy-Qkb1Kj8J/lib/python3.10/site-packages/lxml/etree.cpython-310-darwin.so, 0x0002): tried: '/Users/matias/.gvm/pkgsets/go1.17.1/global/overlay/lib/etree.cpython-310-darwin.so' (no such file), '/etree.cpython-310-darwin.so' (no such file), '/Users/matias/.local/share/virtualenvs/welfare-lottery-scrapy-Qkb1Kj8J/lib/python3.10/site-packages/lxml/etree.cpython-310-darwin.so' (mach-o file, but is an incompatible architecture (have (x86_64), need (arm64e)))
 ```
 这是因为我们直接使用`pip install`安装的`scrapy`依赖`lxml`包不是`arm64e`版本的，那怎么办呢？其实，很简单，我们使用`conda install`安装`lxml`就搞定了：
-```
+```sh
 $ conda install -c conda-forge lxml
 ```
 安装完毕就可以正常使用了。
 如果上述方法还是不行则使用下面的方法更新`lxml`
-```
-pip3 uninstall lxml  
+```sh
+$ pip3 uninstall lxml  
 Found existing installation: lxml 4.9.1
 Uninstalling lxml-4.9.1:
   Would remove:
