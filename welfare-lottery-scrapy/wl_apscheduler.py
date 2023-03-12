@@ -1,8 +1,8 @@
 '''
 Author: matiastang
 Date: 2022-08-19 10:12:34
-LastEditors: matiastang
-LastEditTime: 2023-03-09 19:40:02
+LastEditors: tangdaoyong
+LastEditTime: 2023-03-12 17:07:02
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/wl_apscheduler.py
 Description: 定时任务
 '''
@@ -25,6 +25,6 @@ if __name__ == '__main__':
     sched = BlockingScheduler()
     sched.add_job(
         func=my_job, trigger="cron",
-        day_of_week="1, 3, 6", hour="21", minute="40"
+        day_of_week="1, 3, 6", hour="22", minute="00"
     )
     sched.start()
