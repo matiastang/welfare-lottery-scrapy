@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2023-03-09 19:39:26
+LastEditTime: 2023-03-13 17:50:19
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -34,7 +34,7 @@ class WelfarelotteryPipeline:
             # db="${{secrets.TDY_MYSQL_SCRAPY_DB}}",
             # user="${{secrets.TDY_MYSQL_USER}}",
             # passwd="${{secrets.TDY_MYSQL_PASSWD}}",
-            host='127.0.0.1',
+            host='110.41.145.30',
             db="mt_scrapy",
             user="matiastang",
             # user="root",
@@ -69,7 +69,6 @@ class WelfarelotteryPipeline:
         """
         updateSql = """
             UPDATE welfare_lottery_double SET
-            code=%s,
             date=%s,
             week=%s,
             red=%s,
@@ -79,7 +78,8 @@ class WelfarelotteryPipeline:
             sales=%s,
             poolmoney=%s,
             video_link=%s,
-            details_link=%s;
+            details_link=%s
+            WHERE code=%s
         """
         prizegrades = json.dumps(list(map(lambda info: { 'type': str(info['type']), 'num': info['typenum'], 'money': info['typemoney'] }, item['prizegrades'])))
         # name区分爬虫
@@ -103,9 +103,9 @@ class WelfarelotteryPipeline:
                 #     except:
                 #         print(item['code'] + '====== add保存失败 ======')
                 #         self.connect.rollback()
-                print(updateSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                print(updateSql, [item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink'], item['code']])
                 try:
-                    self.cursor.execute(updateSql, [item['code'], item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink']])
+                    self.cursor.execute(updateSql, [item['date'], item['week'], item['red'], item['blue'], item['content'], prizegrades, item['sales'], item['poolmoney'], item['videoLink'], item['detailsLink'], item['code']])
                     print(item['code'] + '====== 更新成功 ======')
                     self.connect.commit()
 

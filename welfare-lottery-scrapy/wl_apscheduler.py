@@ -1,8 +1,8 @@
 '''
 Author: matiastang
 Date: 2022-08-19 10:12:34
-LastEditors: tangdaoyong
-LastEditTime: 2023-03-12 17:07:02
+LastEditors: matiastang
+LastEditTime: 2023-03-13 17:52:41
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/wl_apscheduler.py
 Description: 定时任务
 '''
@@ -26,5 +26,9 @@ if __name__ == '__main__':
     sched.add_job(
         func=my_job, trigger="cron",
         day_of_week="1, 3, 6", hour="22", minute="00"
+    )
+    sched.add_job(
+        func=my_job, trigger="cron",
+        day_of_week="0, 2, 4", hour="1", minute="00"
     )
     sched.start()
