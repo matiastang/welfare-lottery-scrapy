@@ -26,7 +26,9 @@ jobs:
           ssh-keyscan -t rsa $HOST >> ~/.ssh/known_hosts
           echo "同步文件"
           scp -o StrictHostKeyChecking=no -r ./welfare-lottery-scrapy root@${HOST}:/var/mt-project/mt-scrapy/
-          echo "上传完成"
+          echo "上传完成,开始重启"
+        # ssh -o StrictHostKeyChecking=no root@${HOST} "/var/mt-project/mt-scrapy/welfare-lottery-scrapy/reset.sh"
+        # echo "重启完成"
         # echo "获取进程号"
         # PID=$(ssh -o StrictHostKeyChecking=no root@${HOST} "ps -ef | grep wl_apscheduler.py | grep -v grep | awk '{print \$2}'")
         # echo PID
