@@ -27,15 +27,16 @@ jobs:
           echo "同步文件"
           scp -o StrictHostKeyChecking=no -r ./welfare-lottery-scrapy root@${HOST}:/var/mt-project/mt-scrapy/
           echo "上传完成"
-          echo "获取进程号"
-          PID=$(ssh -o StrictHostKeyChecking=no root@${HOST} "ps -ef | grep wl_apscheduler.py | grep -v grep | awk '{print \$2}'")
-          echo PID
-          echo "关闭老进程"
-          ssh -o StrictHostKeyChecking=no root@${HOST} "kill -9 ${PID}"
-          echo "启动新进程"
-          ssh -o StrictHostKeyChecking=no root@${HOST} "cd /var/mt-project/mt-scrapy/welfare-lottery-scrapy/ && nohup python3 ./wl_apscheduler.py >output.log 2>& 1 &"
-          echo "完成部署"
+        # echo "获取进程号"
+        # PID=$(ssh -o StrictHostKeyChecking=no root@${HOST} "ps -ef | grep wl_apscheduler.py | grep -v grep | awk '{print \$2}'")
+        # echo PID
+        # echo "关闭老进程"
+        # ssh -o StrictHostKeyChecking=no root@${HOST} "kill -9 ${PID}"
+        # echo "启动新进程"
+        # ssh -o StrictHostKeyChecking=no root@${HOST} "cd /var/mt-project/mt-scrapy/welfare-lottery-scrapy/ && nohup python3 ./wl_apscheduler.py >output.log 2>& 1 &"
+        # echo "完成部署"
         # ssh -o StrictHostKeyChecking=no root@${HOST} "ps -ef | grep wl_apscheduler.py | grep -v grep | awk '{print \$2}' | xargs kill -9"
+        # ssh -o StrictHostKeyChecking=no root@${HOST} "cd /var/mt-project/mt-scrapy/welfare-lottery-scrapy/; ps -ef | grep wl_apscheduler.py | grep -v grep | awk '{print $2}' | xargs kill -9; nohup python3 ./wl_apscheduler.py &;"
         # echo "重启服务器"
         # ssh -o StrictHostKeyChecking=no root@${HOST} "sudo /usr/sbin/nginx -s reload"
         # 后端服务相关
