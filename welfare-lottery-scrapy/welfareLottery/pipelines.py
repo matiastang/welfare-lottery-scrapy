@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2023-03-13 17:50:19
+LastEditTime: 2023-08-14 10:18:31
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -20,29 +20,29 @@ import json
 class WelfarelotteryPipeline:
 
     def __init__(self) -> None:
-        # self.connect = pymysql.connect(
-        #     host='127.0.0.1',
-        #     db="mt_scrapy",
-        #     user="root",
-        #     passwd="MySQL_18380449615",
-        #     charset='utf8',
-        #     use_unicode=True,
-        #     cursorclass=pymysql.cursors.DictCursor
-        # )
         self.connect = pymysql.connect(
-            # host="${{secrets.TDY_HOST}}",
-            # db="${{secrets.TDY_MYSQL_SCRAPY_DB}}",
-            # user="${{secrets.TDY_MYSQL_USER}}",
-            # passwd="${{secrets.TDY_MYSQL_PASSWD}}",
-            host='110.41.145.30',
+            host='127.0.0.1',
             db="mt_scrapy",
-            user="matiastang",
-            # user="root",
+            user="root",
             passwd="MySQL_18380449615",
             charset='utf8',
             use_unicode=True,
             cursorclass=pymysql.cursors.DictCursor
         )
+        # self.connect = pymysql.connect(
+        #     # host="${{secrets.TDY_HOST}}",
+        #     # db="${{secrets.TDY_MYSQL_SCRAPY_DB}}",
+        #     # user="${{secrets.TDY_MYSQL_USER}}",
+        #     # passwd="${{secrets.TDY_MYSQL_PASSWD}}",
+        #     host='110.41.145.30',
+        #     db="mt_scrapy",
+        #     user="matiastang",
+        #     # user="root",
+        #     passwd="MySQL_18380449615",
+        #     charset='utf8',
+        #     use_unicode=True,
+        #     cursorclass=pymysql.cursors.DictCursor
+        # )
         print('====== mysql链接成功 ======')
         # 通过cursor执行增删查改
         self.cursor = self.connect.cursor()
