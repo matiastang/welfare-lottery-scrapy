@@ -2,7 +2,7 @@
 Author: matiastang
 Date: 2022-08-09 17:07:12
 LastEditors: matiastang
-LastEditTime: 2023-08-14 10:18:31
+LastEditTime: 2023-11-10 10:51:16
 FilePath: /welfare-lottery-scrapy/welfare-lottery-scrapy/welfareLottery/pipelines.py
 Description: pipelines
 '''
@@ -23,8 +23,8 @@ class WelfarelotteryPipeline:
         self.connect = pymysql.connect(
             host='127.0.0.1',
             db="mt_scrapy",
-            user="root",
-            passwd="MySQL_18380449615",
+            user="matias",
+            passwd="matias_18380449615",
             charset='utf8',
             use_unicode=True,
             cursorclass=pymysql.cursors.DictCursor
